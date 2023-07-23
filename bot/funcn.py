@@ -241,10 +241,21 @@ async def fast_download(e, download_url, filename=None):
         return (
             asyncio.get_event_loop().create_task(
                 progress(
-                    f"**📥 Downloading video from {download_url}**",
+                    d,
+                    t,
+                    e,
+                    time.time(),
+                    f"** Downloading video from {download_url}**",
                 )
             ),
         )
+
+
+    async def _maybe_await(value):
+        if inspect.isawaitable(value):
+            return await value
+        else:
+            return value
 
     async with aiohttp.ClientSession() as session:
         async with session.get(download_url, timeout=None) as response:
